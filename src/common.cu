@@ -870,14 +870,16 @@ testResult_t run() {
 #else
   char* world_size_str = getenv("WORLD_SIZE");
   if (world_size_str) {
-    nProcs = strtol(world_size_str, NULL, 0);
-    if (nProcs == 0) {
-      nProcs = 1;
+    totalProcs = strtol(world_size_str, NULL, 0);
+    if (totalProcs == 0) {
+      totalProcs = 1;
     }
+    ncclProcs = totalProcs;
   }
   char* rank_str = getenv("RANK");
   if (rank_str) {
     proc = strtol(rank_str, NULL, 0);
+    ncclProc = proc;
   }
 #endif
   is_main_thread = is_main_proc = (proc == 0) ? 1 : 0;
