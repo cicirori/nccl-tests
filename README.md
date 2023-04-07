@@ -34,6 +34,19 @@ Run with MPI on 10 processes (potentially on multiple nodes) with 4 GPUs each, f
 $ mpirun -np 10 ./build/all_reduce_perf -b 8 -e 128M -f 2 -g 4
 ```
 
+Run without MPI on multiple nodes with 4 GPUs each :
+```shell
+$ NCCL_COMM_ID=$MASTER_IP:$MASTER_PORT WORLD_SIZE=$WORLD_SIZE RANK=$RANK ./build/all_reduce_perf -b 8 -e 128M -f 2 -g 4
+```
+
+Run with PyTorch operator in a k8s cluster with 4 GPUs on each node:
+```shell
+$ ping $MASTER_ADDR -c 1;
+$ export MASTER_IP=$(ping $MASTER_ADDR -c 1 | awk '/icmp_seq=0/{print $4}' | cut -d ':' -f1);
+$ export NCCL_COMM_ID=$MASTER_IP:$MASTER_PORT;
+$ ./build/all_reduce_perf -b 8 -e 128M -f 2 -g 4
+```
+
 ### Performance
 
 See the [Performance](doc/PERFORMANCE.md) page for explanation about numbers, and in particular the "busbw" column.
